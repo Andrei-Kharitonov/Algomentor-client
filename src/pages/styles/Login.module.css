@@ -1,0 +1,22 @@
+.buttonLogin {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 40px;
+  background: linear-gradient(40deg, #fa3df4, #e50f0f);
+}
+
+.forgot {
+  font-family: "JetBrains Mono", monospace;
+  color: #4e60ff;
+  font-size: 14px;
+}
+
+.remember {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+}
+
+.formTitle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 50px;
+  font-weight: bold;
+}
