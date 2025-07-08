@@ -1,6 +1,7 @@
 import styles from './styles/Login.module.css';
 import githublogo from '../assets/github.svg';
 import google from '../assets/google.svg';
+import { Link } from 'react-router';
 
 function Login() {
   return (
@@ -32,6 +33,7 @@ function Login() {
               <div className="w-[120px] h-[61px] bg-[#D9D9D9] rounded-[40px] flex justify-center m-auto items-center"><a href=""><img className="" src={githublogo}></img></a></div>
             </div >
           </div>
+          <div>Если не зарегистрирован <Link to="/register" className="text-blue-400" >Загерайся еблан</Link></div>
         </form>
 
       </div>
