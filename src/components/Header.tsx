@@ -1,8 +1,22 @@
 import { Link } from 'react-router';
 import styles from './styles/Header.module.css';
 import login from '../assets/login.svg';
+import {onAuthStateChanged, signOut, type User} from 'firebase/auth';
+import {auth} from './firebase';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+  }, []);
   return (
     <div className={styles.header}>
       <div className="pt-[40px] flex w-[1100px] m-auto justify-between">
@@ -14,12 +28,23 @@ export default function Header() {
           <a href="#">О нас</a>
           <a href="#">Контакты</a>
         </nav>
-        <Link to="/login" >
+        {currentUser ? currentUser.email : <Link to="/login" >
           <button className={styles.login}>
             <img src={login} className="inline mr-[7px]" alt="" />
             ВХОД
           </button>
-        </Link>
+        </Link>}
+    
+        <button className={styles.login} onClick={() => {
+          signOut(auth).then(() => {
+            // Sign-out successful.
+          }).catch((error) => {
+            // An error happened.
+          });
+        }}>
+          <img src={login} className="inline mr-[7px]" alt="" />
+            ВЫХОД
+        </button>
       </div>
     </div>
 
