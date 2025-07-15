@@ -28,3 +28,4 @@ const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });

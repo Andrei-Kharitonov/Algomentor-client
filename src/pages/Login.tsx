@@ -4,7 +4,7 @@ import google from '../assets/google.svg';
 import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import {signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, signInWithPopup}from 'firebase/auth';
-import {auth, googleProvider} from '../components/firebase'; 
+import {auth, googleProvider } from '../components/firebase'; 
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -36,14 +36,12 @@ function Login() {
       console.log(error);
     }
   };
-
   const signInWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
       window.location.href = '/';
-      console.log('User signed in:', result.user);
-    } catch (error : unknown) {
-      console.error('Error signing in with Google:', error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -70,8 +68,8 @@ function Login() {
 
           <button className={styles.buttonLogin + ' w-[450px] rounded-[30px] h-[70px] text-white mt-[20px]'}>LOGIN</button>
           <div className="flex justify-center mt-[20px]">
-            <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]" onClick={signInWithGoogle}>
-              <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center"><img className="" src={google}></img></div>
+            <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
+              <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGoogle}><img className="" src={google}></img></div>
             </div >
             <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
               <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center"><a href=""><img className="" src={githublogo}></img></a></div>
