@@ -4,7 +4,7 @@ import google from '../assets/google.svg';
 import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import {signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, signInWithPopup}from 'firebase/auth';
-import {auth, googleProvider } from '../components/firebase'; 
+import {auth, googleProvider, githubProvider } from '../components/firebase'; 
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -45,6 +45,15 @@ function Login() {
     }
   };
 
+  const signInWithGitHub = async () => {
+    try {
+      await signInWithPopup(auth, githubProvider);
+      window.location.href = '/';
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
     
   return (
     <div className="mt-[100px] bg-[#D4C4FF] border-[4px] border-[#5F3AA8] w-[552px] h-[632px] m-auto rounded-[30px]">
@@ -72,7 +81,7 @@ function Login() {
               <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGoogle}><img className="" src={google}></img></div>
             </div >
             <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
-              <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center"><a href=""><img className="" src={githublogo}></img></a></div>
+              <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGitHub}><img className="" src={githublogo}></img></div>
             </div >
           </div>
           <div className={"font-['JetBrains_Mono'] text-[14px] text-[#5F3AA8] mt-[20px]"}>Если не зарегистрирован? <Link to="/register" className="text-[#4e60ff]" >Зарегистрироваться</Link></div>

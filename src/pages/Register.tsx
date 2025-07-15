@@ -8,9 +8,9 @@ import {
   browserSessionPersistence,
   setPersistence,
   onAuthStateChanged,
-  signInWithPopup
+  signInWithPopup,
 } from 'firebase/auth';
-import { auth, db, googleProvider } from '../components/firebase';
+import { auth, db, googleProvider,githubProvider } from '../components/firebase';
 import { setDoc, doc } from 'firebase/firestore';
 
 function Register() {
@@ -53,6 +53,15 @@ function Register() {
   const signUpWithGoogle = async () => {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
+      await setDoc(doc(db, 'Users', user.uid), { email: user.email });
+      window.location.href = '/';
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const signUpWithGitHub = async () => {
+    try {
+      const { user } = await signInWithPopup(auth, githubProvider);
       await setDoc(doc(db, 'Users', user.uid), { email: user.email });
       window.location.href = '/';
     } catch (err) {
@@ -112,7 +121,7 @@ function Register() {
               </div>
             </div>
 
-            <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
+            <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]" onClick={signUpWithGitHub}>
               <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center">
                 <a href="#"><img src={githublogo} alt="GitHub" /></a>
               </div>
