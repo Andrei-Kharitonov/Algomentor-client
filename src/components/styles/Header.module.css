@@ -1,10 +1,10 @@
 .header {
   position: relative;
-  background-color: #2d2d2d;
-  max-width: 1200px;
+  background-color: rgba(87, 49, 163, 0.94);
+  max-width: 100%;
   height: 150px;
   margin: 0 auto;
-  border-radius: 0 0 50px 50px;
+  
 }
 
 /* Градиентная "рамка" */
@@ -15,14 +15,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  border: 4px solid transparent;
-  border-radius: 0 0 50px 50px;
+  border: 2px solid transparent;
   background: linear-gradient(45deg, #fa3df4, #e50f0f) border-box;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
   mask-composite: exclude;
   pointer-events: none;
   border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 .logo {
@@ -41,7 +42,7 @@
 
 .navigation {
   color: #e0e0e0;
-  font-size: 18px;
+  font-size: 21px;
   font-family: "JetBrains Mono", monospace;
 }
 

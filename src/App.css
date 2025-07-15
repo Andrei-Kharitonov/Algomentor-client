@@ -1,3 +1,21 @@
 body {
-  background-color: #2d2d2d;
+  background-color: #D4C4FF;
+}
+.tt{
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+}
+.maketTitle{
+  color: #5F3AA8;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 38px;
+  margin-bottom: 30px;
+}
+.maketDesc{
+color: #5F3AA8;
+font-family: "JetBrains Mono", monospace;
+font-size: 24px;
+}
+img {
+  pointer-events: none; /* Отключает все взаимодействия с изображением */
 }

@@ -13,10 +13,15 @@
 .remember {
   font-family: "JetBrains Mono", monospace;
   font-size: 14px;
+  color:#5F3AA8;
 }
 
 .formTitle {
   font-family: "JetBrains Mono", monospace;
   font-size: 50px;
   font-weight: bold;
+  color: #5F3AA8;
+}
+.loginButton{
+  font-family: "JetBrains Mono", monospace;
 }
