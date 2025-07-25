@@ -5,8 +5,24 @@ import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import {signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, signInWithPopup}from 'firebase/auth';
 import {auth, googleProvider, githubProvider } from '../components/firebase'; 
+import type { FirebaseError } from 'firebase/app';
+import { ToastContainer, toast } from 'react-toastify';
 
 function Login() {
+  const showErrorToast = (message: string) => {
+    toast.error(message, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      className: '!bg-[#2A2B32] !text-[#BB86FC]',
+      progressClassName: '!bg-gradient-to-r from-[#FA3DF4] to-[#E50F0F]'
+    });
+  };
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checkbox, setCheckbox] = useState(false);
@@ -25,6 +41,7 @@ function Login() {
     e.preventDefault();
     try{
       await signInWithEmailAndPassword(auth, email, password);
+      // await linkWithPopup(userCredential.user, githubProvider);
       if(checkbox){
         setPersistence(auth, browserLocalPersistence);
       }
@@ -32,8 +49,11 @@ function Login() {
         setPersistence(auth, browserSessionPersistence);
       }
       window.location.href = '/';
-    } catch(error : unknown){
+    } catch(error){
       console.log(error);
+      if((error as FirebaseError).code == 'auth/invalid-credential'){
+        showErrorToast('НЕПРАВИЛЬНЫЙ ЛОГИН ИЛИ ПАРОЛЬ');
+      }
     }
   };
   const signInWithGoogle = async () => {
@@ -56,39 +76,50 @@ function Login() {
 
     
   return (
-    <div className="mt-[100px] bg-[#D4C4FF] border-[4px] border-[#5F3AA8] w-[552px] h-[632px] m-auto rounded-[30px]">
-      <div className={styles.formTitle + ' text-center pt-[20px] pb-[20px]'}>LOGIN FORM</div>
-      <hr style={{ border: '1.5px solid #5F3AA8' }} />
-      <div className="flex flex-col justify-between text-center max-w-[450px] m-auto">
-        <form className="" action="" onSubmit={handleRegister}>
-        
-          <input type="email" onChange={(event) => setEmail(event.target.value)} value={email} id="first" name="first" required placeholder="EMAIL" className="border-[#5F3AA8] border-[2px] w-[450px] h-[70px] rounded-[30px] pl-[18px] mt-[40px] focus:outline-none" />
-        
+    <div className="w-[560px] h-[640px] p-[1px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] border-3 m-auto mt-[100px] rounded-[30px]">
+      <div className="bg-[#252525] w-[552px] h-[632px] rounded-[30px]">
+        <div className={styles.formTitle + ' text-center pt-[20px] pb-[20px]'}>LOGIN FORM</div>
+        <hr style={{ border: '1.5px solid #BB86FC' }} />
+        <div className="flex flex-col justify-between text-center max-w-[460px] m-auto">
+          <form className="" action="" onSubmit={handleRegister}>
+         
+            <input
+              type="email"
+              onChange={(event) => setEmail(event.target.value)}
+              value={email}
+              id="first"
+              name="first"
+              required
+              placeholder="EMAIL"
+              className="inpuut border-[#BB86FC]  text-[#BB86FC] text-[22px] mt-[30px] border-[2px] w-[450px] h-[70px] border rounded-[30px] pl-[18px] focus:outline-none"
+            />
+       
           
-          <input type="password"  onChange={(event) => setPassword(event.target.value)} value={password} id="first" name="first" required placeholder="PASSWORD" className="border-[#5F3AA8] mt-[30px] border-[2px] w-[450px] h-[70px] border rounded-[30px] pl-[18px] focus:outline-none"/>
+            <input type="password"  onChange={(event) => setPassword(event.target.value)} value={password} id="first" name="first" required placeholder="PASSWORD" className="inpuut border-[#BB86FC]  text-[#BB86FC] text-[22px] mt-[30px] border-[2px] w-[450px] h-[70px] border rounded-[30px] pl-[18px] focus:outline-none"/>
           
-          <div className="flex justify-between items-center mt-[20px] pl-2 pr-2">
-            <div className="flex items-center">
-              <input type="checkbox" id="horns" name="horns" className="border-[3px] border-[#5F3AA8]" onChange={() => setCheckbox(!checkbox)} checked={checkbox} />
-              <label className={styles.remember + ' ml-[6px]'} htmlFor="horns" >Запомнить меня</label>
+            <div className="flex justify-between items-center mt-[20px] pl-2 pr-2">
+              <div className="flex items-center">
+                <input type="checkbox" id="horns" name="horns" className="border-[3px] border-[#BB86FC]" onChange={() => setCheckbox(!checkbox)} checked={checkbox} />
+                <label className={styles.remember + ' ml-[6px]'} htmlFor="horns" >Запомнить меня</label>
+              </div>
+              <Link to="/resetpassword" ><span className={styles.forgot}>Забыли пароль?</span></Link>
             </div>
-            <Link to="/resetpassword" ><span className={styles.forgot}>Забыли пароль?</span></Link>
-          </div>
 
-          <button className={styles.buttonLogin + ' w-[450px] rounded-[30px] h-[70px] text-white mt-[20px]'}>LOGIN</button>
-          <div className="flex justify-center mt-[20px]">
-            <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
-              <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGoogle}><img className="" src={google}></img></div>
-            </div >
-            <div className="inline-block p-[3px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
-              <div className="w-[120px] h-[61px] bg-[#D4C4FF] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGitHub}><img className="" src={githublogo}></img></div>
-            </div >
-          </div>
-          <div className={"font-['JetBrains_Mono'] text-[14px] text-[#5F3AA8] mt-[20px]"}>Если не зарегистрирован? <Link to="/register" className="text-[#4e60ff]" >Зарегистрироваться</Link></div>
-        </form>
+            <button className={styles.buttonLogin + ' w-[450px] rounded-[30px] h-[70px] text-[#ddc6f9] mt-[20px] cursor-pointer font-bold'}>ВОЙТИ</button>
+            <div className="flex justify-center mt-[20px]">
+              <div className="inline-block p-[2px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
+                <div className="w-[120px] h-[61px] bg-[#252525] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGoogle}><img className="text-[#BB86FC]" src={google}></img></div>
+              </div >
+              <div className="inline-block p-[2px] rounded-[40px] bg-gradient-to-l from-[#e50f0f] to-[#fa3df4] outline-none ml-[15px]">
+                <div className="w-[120px] h-[61px] bg-[#252525] text-[#BB86FC] rounded-[40px] flex justify-center m-auto items-center" onClick={signInWithGitHub}><img className="" src={githublogo}></img></div>
+              </div >
+            </div>
+            <div className={"font-['JetBrains_Mono'] text-[14px] text-[#BB86FC] mt-[20px]"}>Если не зарегистрирован? <Link to="/register" className="text-[#4e60ff]" >Зарегистрироваться</Link></div>
+          </form>
+          <ToastContainer />
+        </div>
 
       </div>
-
     </div>
   );
 }
