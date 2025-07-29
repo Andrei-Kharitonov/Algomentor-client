@@ -24,3 +24,39 @@ img {
 .inpuut{
  background: rgba(255, 255, 255, 0.22);
 }
+.course {
+  position: relative;
+  background-color: #252526;
+  max-width: 1475px;
+  height: 120px;
+  border-radius: 50px;
+  padding-left: 30px; /* добавим отступ для текста */
+  display: flex;
+  align-items: center; /* выровнять по вертикали */
+  color: white; /* цвет текста */
+  font-size: 20px;
+  z-index: 1;
+  overflow: hidden;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+.course::before {
+  border-radius: 50px;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 5px solid transparent;
+  background: linear-gradient(45deg, #fa3df4, #e50f0f) border-box;
+
+  /* Маска для создания рамки */
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+
+  pointer-events: none;
+  z-index: -1; /* важно: рамка под контентом */
+}

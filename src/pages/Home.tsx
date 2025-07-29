@@ -18,6 +18,15 @@ function Home() {
           <div><img className="" src={frame}></img></div>
         </div>
       </div>
+
+      <div className="m-auto w-[1200px] h-[400px] bg-amber-400 mb-7 flex">
+        <button className="w-[150px] h-[30px] bg-amber-950 text-blue-800">
+  Месяц
+        </button>
+        <button className="w-[150px] h-[30px] bg-amber-950 text-blue-800 ml-1.5">
+          Год
+        </button>
+      </div>
     </>
   );
 }

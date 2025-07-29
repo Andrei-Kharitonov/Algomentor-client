@@ -74,16 +74,18 @@ export default function Header() {
               </div>
 
               {isOpen && (
-                <div className="border-none text-white text-center absolute top-full right-6 mt-0 bg-gradient-to-r from-[#FA3DF4] to-[#E50F0F] border rounded-lg shadow-lg w-42 z-50">
+                <div className="border-none text-white text-center absolute top-full right-6 mt-0 border-[#BB86FC] bg-[#252525]">
                   <ul className="text-gray-700">
                     <li
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-white"
-                      onClick={handleSignOut}
+                      className="px-16 py-3 hover:bg-[rgba(255,255,255,0.22)] cursor-pointer text-white border border-[##BB86FC] rounded-[10px] border-[2px] border-b-0 mt-0.5"
+                      onClick={tranferCources}
+                     
                     >
-                  Выйти
+                  КУРСЫ
                     </li>
-                    <li onClick={tranferCources}>
-                    КУРСЫ
+                    <li className="px-16 py-3 hover:bg-[rgba(255,255,255,0.22)] cursor-pointer text-white border border-[##BB86FC] rounded-[10px] border-[2px]" 
+                      onClick={handleSignOut}>
+                  ВЫЙТИ
                     </li>
                   </ul>
                 </div>

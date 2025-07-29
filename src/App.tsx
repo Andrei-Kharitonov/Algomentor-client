@@ -5,6 +5,7 @@ import Login from './pages/Login.tsx';
 import Register from './pages/Register.tsx';
 import ResetPassword from './pages/ResetPassword.tsx';
 import Courses from './pages/Courses.tsx';
+import Themes from './pages/Themes.tsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/courses" element={<Courses />} />
+        <Route path="/themes" element={<Themes />} />
       </Routes>
     </BrowserRouter>
   );

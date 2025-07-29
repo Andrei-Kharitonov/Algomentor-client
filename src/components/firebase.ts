@@ -4,6 +4,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
+import { getFunctions } from 'firebase/functions';
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -29,6 +30,7 @@ export const db = getFirestore(app);
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
+export const functions = getFunctions(app);
 
 
 export const githubProvider = new GithubAuthProvider();
