@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
@@ -25,7 +25,7 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const analytics = getAnalytics(app);
+
 export const db = getFirestore(app);
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();

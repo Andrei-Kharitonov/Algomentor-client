@@ -1,0 +1,85 @@
+import type { APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
+import { v4 as uuidv4 } from 'uuid';
+import { checkout, authAdmin, PLANS } from './common';
+
+export const handler: APIGatewayProxyHandler = async (
+  event
+): Promise<APIGatewayProxyResult> => {
+  const origin = process.env.FRONT_ORIGIN ?? '*';
+
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400',
+    'Content-Type': 'application/json',
+    Vary: 'Origin'
+  };
+
+  // pre-flight
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
+  try {
+    /* 1. токен ---------------------------------------------------------------- */
+    const bearer = event.headers.Authorization || event.headers.authorization;
+    if (!bearer?.startsWith('Bearer ')) {
+      return { statusCode: 401, headers, body: JSON.stringify({ error: 'No token' }) };
+    }
+    const token = bearer.slice('Bearer '.length);
+    const { uid } = await authAdmin.verifyIdToken(token);
+
+    /* 2. тариф ----------------------------------------------------------------- */
+    const { tariff = 'basic' } = JSON.parse(event.body || '{}') as {
+      tariff?: keyof typeof PLANS;
+    };
+    if (!PLANS[tariff]) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Bad tariff' }) };
+    }
+    const plan = PLANS[tariff];
+    console.log('ENV', {
+      SHOP_ID:    process.env.SHOP_ID,
+      SECRET_KEY: process.env.SECRET_KEY?.slice(0, 15) + '…',   // первые 15 символов
+    });
+    const authHeader = Buffer
+      .from(`${process.env.SHOP_ID}:${process.env.SECRET_KEY}`)
+      .toString('base64');
+    console.log('Basic', authHeader);
+
+    /* 3. платеж ---------------------------------------------------------------- */
+    const payment = await checkout.createPayment(
+      {
+        amount: plan.amount,
+        confirmation: { type: 'redirect', return_url: 'https://your-site.ru/thanks' },
+        description: `Algomentor ${tariff}`,
+        metadata: { uid, tariff, periodDays: plan.days }
+      },
+      uuidv4()
+    );
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ confirmationUrl: payment.confirmation.confirmation_url })
+    };
+  } catch (err) {
+    /* ---- расширенный лог + проброс причины ---------------------------------- */
+    // eslint-disable-next-line no-console
+    console.error('PAYMENT_ERROR', {
+      statusCode: err?.statusCode,
+      message: err?.message,
+      response: err?.response?.data ?? err?.body ?? err
+    });
+
+    const code = err?.statusCode ?? 500;
+    return {
+      statusCode: code,
+      headers,
+      body: JSON.stringify({
+        error: err?.message ?? 'Unknown error',
+        details: err?.response?.data ?? err?.body ?? null
+      })
+    };
+  }
+};

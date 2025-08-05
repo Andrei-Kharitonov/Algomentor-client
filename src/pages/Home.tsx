@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import frame from '../assets/main.png';
 import { useInView } from 'react-intersection-observer';
+import { buy } from '../pay';
 function Home() {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -20,10 +21,10 @@ function Home() {
       </div>
 
       <div className="m-auto w-[1200px] h-[400px] bg-amber-400 mb-7 flex">
-        <button className="w-[150px] h-[30px] bg-amber-950 text-blue-800">
+        <button onClick={() => buy('basic')} className="w-[150px] h-[30px] bg-amber-950 text-blue-800">
   Месяц
         </button>
-        <button className="w-[150px] h-[30px] bg-amber-950 text-blue-800 ml-1.5">
+        <button onClick={() => buy('pro')} className="w-[150px] h-[30px] bg-amber-950 text-blue-800 ml-1.5">
           Год
         </button>
       </div>
