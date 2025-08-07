@@ -7,30 +7,43 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const origin = process.env.FRONT_ORIGIN ?? '*';
 
+  /* ----------  CORS  ----------- */
   const headers: Record<string, string> = {
-    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Origin':  origin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Max-Age': '86400',
-    'Content-Type': 'application/json',
+    // 👇 разрешаем наш новый заголовок
+    'Access-Control-Allow-Headers': 'Content-Type, X-Firebase-Token',
+    'Access-Control-Max-Age':       '86400',
+    'Content-Type':                 'application/json',
     Vary: 'Origin'
   };
 
-  // pre-flight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers, body: '' };
   }
 
   try {
-    /* 1. токен ---------------------------------------------------------------- */
-    const bearer = event.headers.Authorization || event.headers.authorization;
-    if (!bearer?.startsWith('Bearer ')) {
+    /* 1. токен ---------------------------------------------------------- */
+    const token = event.headers['X-Firebase-Token']
+               || event.headers['x-firebase-token'];  // учтём оба регистра
+
+    console.log('HEADERS', event.headers);
+    console.log('TOKEN-HEAD', token?.slice(0, 30) + '…');
+
+    if (!token) {
       return { statusCode: 401, headers, body: JSON.stringify({ error: 'No token' }) };
     }
-    const token = bearer.slice('Bearer '.length);
-    const { uid } = await authAdmin.verifyIdToken(token);
 
-    /* 2. тариф ----------------------------------------------------------------- */
+    let uid: string;
+    try {
+      ({ uid } = await authAdmin.verifyIdToken(token));
+      console.log('verify OK', uid);
+    } catch (e) {
+      console.error('verify FAIL', e);
+      throw e;                               // перейдём в catch ниже
+    }
+
+    /* 2. тариф ---------------------------------------------------------- */
     const { tariff = 'basic' } = JSON.parse(event.body || '{}') as {
       tariff?: keyof typeof PLANS;
     };
@@ -38,22 +51,20 @@ export const handler: APIGatewayProxyHandler = async (
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Bad tariff' }) };
     }
     const plan = PLANS[tariff];
+
+    /* 3. для отладки печатаем env -------------------------------------- */
     console.log('ENV', {
       SHOP_ID:    process.env.SHOP_ID,
-      SECRET_KEY: process.env.SECRET_KEY?.slice(0, 15) + '…',   // первые 15 символов
+      SECRET_KEY: process.env.SECRET_KEY?.slice(0, 15) + '…'
     });
-    const authHeader = Buffer
-      .from(`${process.env.SHOP_ID}:${process.env.SECRET_KEY}`)
-      .toString('base64');
-    console.log('Basic', authHeader);
 
-    /* 3. платеж ---------------------------------------------------------------- */
+    /* 4. создаём платёж -------------------------------------------------- */
     const payment = await checkout.createPayment(
       {
-        amount: plan.amount,
+        amount:       plan.amount,
         confirmation: { type: 'redirect', return_url: 'https://your-site.ru/thanks' },
-        description: `Algomentor ${tariff}`,
-        metadata: { uid, tariff, periodDays: plan.days }
+        description:  `Algomentor ${tariff}`,
+        metadata:     { uid, tariff, periodDays: plan.days }
       },
       uuidv4()
     );
@@ -64,12 +75,10 @@ export const handler: APIGatewayProxyHandler = async (
       body: JSON.stringify({ confirmationUrl: payment.confirmation.confirmation_url })
     };
   } catch (err) {
-    /* ---- расширенный лог + проброс причины ---------------------------------- */
-    // eslint-disable-next-line no-console
     console.error('PAYMENT_ERROR', {
       statusCode: err?.statusCode,
-      message: err?.message,
-      response: err?.response?.data ?? err?.body ?? err
+      message:    err?.message,
+      response:   err?.response?.data ?? err?.body ?? err
     });
 
     const code = err?.statusCode ?? 500;
@@ -77,7 +86,7 @@ export const handler: APIGatewayProxyHandler = async (
       statusCode: code,
       headers,
       body: JSON.stringify({
-        error: err?.message ?? 'Unknown error',
+        error:   err?.message ?? 'Unknown error',
         details: err?.response?.data ?? err?.body ?? null
       })
     };
