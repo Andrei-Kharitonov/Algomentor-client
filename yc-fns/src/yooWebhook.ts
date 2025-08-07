@@ -11,7 +11,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   const meta = pay.metadata as PaymentMetadata | undefined;
   if (!meta?.uid) return { statusCode: 400, body: 'missing uid' };
 
-  const periodEnd = Date.now() + meta.periodDays * 86_400_000; // ms
+  const periodEnd = Date.now() + meta.periodDays * 86_400_000; 
 
   await firestore.doc(`subscriptions/${meta.uid}`).set(
     {

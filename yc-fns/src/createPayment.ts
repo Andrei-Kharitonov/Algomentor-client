@@ -7,11 +7,11 @@ export const handler: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   const origin = process.env.FRONT_ORIGIN ?? '*';
 
-  /* ----------  CORS  ----------- */
+  
   const headers: Record<string, string> = {
     'Access-Control-Allow-Origin':  origin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    // 👇 разрешаем наш новый заголовок
+    
     'Access-Control-Allow-Headers': 'Content-Type, X-Firebase-Token',
     'Access-Control-Max-Age':       '86400',
     'Content-Type':                 'application/json',
@@ -23,9 +23,9 @@ export const handler: APIGatewayProxyHandler = async (
   }
 
   try {
-    /* 1. токен ---------------------------------------------------------- */
+   
     const token = event.headers['X-Firebase-Token']
-               || event.headers['x-firebase-token'];  // учтём оба регистра
+               || event.headers['x-firebase-token'];  
 
     console.log('HEADERS', event.headers);
     console.log('TOKEN-HEAD', token?.slice(0, 30) + '…');
@@ -40,10 +40,10 @@ export const handler: APIGatewayProxyHandler = async (
       console.log('verify OK', uid);
     } catch (e) {
       console.error('verify FAIL', e);
-      throw e;                               // перейдём в catch ниже
+      throw e;                            
     }
 
-    /* 2. тариф ---------------------------------------------------------- */
+
     const { tariff = 'basic' } = JSON.parse(event.body || '{}') as {
       tariff?: keyof typeof PLANS;
     };
@@ -52,13 +52,13 @@ export const handler: APIGatewayProxyHandler = async (
     }
     const plan = PLANS[tariff];
 
-    /* 3. для отладки печатаем env -------------------------------------- */
+    
     console.log('ENV', {
       SHOP_ID:    process.env.SHOP_ID,
       SECRET_KEY: process.env.SECRET_KEY?.slice(0, 15) + '…'
     });
 
-    /* 4. создаём платёж -------------------------------------------------- */
+    
     const payment = await checkout.createPayment(
       {
         amount:       plan.amount,
