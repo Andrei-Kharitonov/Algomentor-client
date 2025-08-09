@@ -13,8 +13,8 @@ export const handler: APIGatewayProxyHandler = async (
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     
     'Access-Control-Allow-Headers': 'Content-Type, X-Firebase-Token',
-    'Access-Control-Max-Age':       '86400',
-    'Content-Type':                 'application/json',
+    'Access-Control-Max-Age': '86400',
+    'Content-Type': 'application/json',
     Vary: 'Origin'
   };
 
@@ -24,8 +24,7 @@ export const handler: APIGatewayProxyHandler = async (
 
   try {
    
-    const token = event.headers['X-Firebase-Token']
-               || event.headers['x-firebase-token'];  
+    const token = event.headers['X-Firebase-Token'] || event.headers['x-firebase-token'];  
 
     console.log('HEADERS', event.headers);
     console.log('TOKEN-HEAD', token?.slice(0, 30) + '…');
@@ -62,7 +61,7 @@ export const handler: APIGatewayProxyHandler = async (
     const payment = await checkout.createPayment(
       {
         amount:       plan.amount,
-        confirmation: { type: 'redirect', return_url: 'https://your-site.ru/thanks' },
+        confirmation: { type: 'redirect', return_url: 'http://localhost:5173' },
         description:  `Algomentor ${tariff}`,
         metadata:     { uid, tariff, periodDays: plan.days }
       },

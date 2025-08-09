@@ -3,7 +3,7 @@ import { auth } from './components/firebase';
 
 const FN_URL = 'https://functions.yandexcloud.net/d4ehpjlbciubvtug23kh';
 
-export async function buy(tariff: 'basic' | 'pro') {
+export async function buy(tariff: 'basic' | 'pro' | 'basic365' | 'pro365') {
   const token = await getIdToken(auth.currentUser!, true);  
 
   const res = await fetch(FN_URL, {

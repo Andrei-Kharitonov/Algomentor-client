@@ -20,7 +20,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="m-auto w-[1200px] h-[400px] bg-amber-400 mb-7 flex">
+      <div className="m-auto w-[1200px] h-[400px] bg-[#252525] mb-7 flex">
         <button onClick={() => buy('basic')} className="w-[150px] h-[30px] bg-amber-950 text-blue-800">
   Месяц
         </button>
