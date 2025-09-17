@@ -1,0 +1,15 @@
+﻿openapi: 3.0.0
+info:
+  title: YooKassa webhook proxy
+  version: "1.0"
+paths:
+  /yoo-webhook:
+    post:
+      summary: Proxy to Cloud Function
+      x-yc-apigateway-integration:
+        type: cloud_functions
+        function_id: d4erlba1spfllkq23v6g
+        tag: "$latest"
+      responses:
+        "200":
+          description: OK

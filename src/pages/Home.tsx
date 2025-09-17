@@ -163,11 +163,11 @@ function Home() {
           </ol>
         </div>
       </div>
-      <div className="flex mx-auto items-center mt-[100px]">
-        <div className="m-auto w-[700px] h-[550px] bg-[#252525] rounded-[50px] block shadowww border border-[#ACDEFF] border-[1px]">
-          <div className="text-[#ACDEFF] text-center text-[70px] font-black pt-[22px]">BASE</div>
+      <div className="flex items-center mt-[150px]">
+        <div className="m-auto w-[700px] h-[470px] bg-[#252525] rounded-[50px] block shadowww">
+          <div className="text-[#ACDEFF] text-center text-[58px] font-black mt-[27px]">BASE</div>
         
-          <ul className="uull mx-auto m-auto list-inside ml-[30px] w-[570px]">
+          <ul className="uull mx-auto m-auto list-inside ml-[30px] w-[570px] h-[110px]">
             <li className="liii">Доступ к базовым урокам</li>
             <li className="liii">Видео-урок, конспект, практические задания по каждой теме</li>
             <li className="liii">Закрытый телеграм канал</li>
@@ -183,10 +183,10 @@ function Home() {
         </div>
 
 
-        <div className="m-auto w-[700px] h-[550px] bg-[#252525] rounded-[50px] block shadowww2 border border-[#ACDEFF] border-[1px]">
-          <div className="t text-center text-[70px] font-black pt-[22px]">PRO</div>
+        <div className="m-auto w-[700px] h-[470px] bg-[#252525] rounded-[50px] block shadowww2">
+          <div className="t text-center text-[58px] font-black mt-[27px]">PRO</div>
         
-          <ul className="uull uull mx-auto m-auto list-inside ml-[30px] w-[570px]">
+          <ul className="uull uull mx-auto m-auto list-inside ml-[30px] w-[570px] h-[110px]">
             <li className="liii2">Доступ к базовым и продвинутым урокам</li>
             <li className="liii2">Видео-урок, конспект, практические задания по каждой теме</li>
             <li className="liii2">Закрытый телеграм канал</li>

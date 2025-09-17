@@ -70,21 +70,19 @@ img {
   list-style-type: disc;
   color: #acdeff;
   
-  font-size: 20px;
+  font-size: 23px;
   margin-top: 20px;
 }
-.liii {
-  text-shadow: 0px 0px 5px #acdeff;
-}
+
 .liii2 {
   color: #bb86fc;
-  text-shadow: 0px 0px 5px #bb86fc;
+ 
 }
 .sha {
-  box-shadow: 0px 0px 15px 1px #acdeff;
+  box-shadow: 0px 0px 10px 1px #acdeff;
 }
 .sha2 {
-  box-shadow: 0px 0px 15px 1px #DC2285;
+  box-shadow: 0px 0px 10px 1px #DC2285;
 }
 .t {
   background: linear-gradient(to top, #fa3df4 0%, #E50F0F 100%);
